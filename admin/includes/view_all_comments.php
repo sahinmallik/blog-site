@@ -48,21 +48,63 @@
 
             echo    "<td>{$comment_email}</td>";
             echo    "<td>{$comment_status}</td>";
+
+
+            $query = "SELECT * FROM `posts` WHERE `posts`.`post_id`=$comment_post_id";
+            $fetching_post_query = mysqli_query($connection, $query);
+            while ($row = mysqli_fetch_assoc($fetching_post_query)) {
+                $post_id = $row['post_id'];
+                $post_title = $row['post_title'];
+            }
+
+
+
+            echo    "<td><a href='../post.php?p_id=$post_id'>{$post_title}</a></td>";
+
+
+
+
+
+
             echo    "<td>{$comment_date}</td>";
 
-            echo   " <td><a class='btn btn-success' href=''>Approve</a></td>";
-            echo    "<td><a class='btn btn-danger' href='p'>Unapprove</a></td>";
-            echo   " <td><a class='btn btn-success' href=''>Edit</a></td>";
-            echo    "<td><a class='btn btn-danger' href=''>Delete</a></td>";
+            echo   " <td><a class='btn btn-success' href='comments.php?approve=$comment_id'>Approve</a></td>";
+            echo    "<td><a class='btn btn-danger' href='comments.php?unapprove=$comment_id'>Unapprove</a></td>";
+            echo    "<td><a class='btn btn-danger' href='comments.php?delete=$comment_id'>Delete</a></td>";
             echo "</tr>";
         }
         ?>
+
         <?php
+        //this the approve functonality
+        if (isset($_GET['approve'])) {
+            $the_comment_id = $_GET['approve'];
+            $query = "UPDATE `comments` SET `comment_status`='Approved' WHERE `comments`.`comment_id`=$the_comment_id";
+            $unapproved_comment_query = mysqli_query($connection, $query);
+            header("Location: comments.php");
+        }
+
+
+        ?>
+        <?php
+        //this the unapprove functonality
+        if (isset($_GET['unapprove'])) {
+            $the_comment_id = $_GET['unapprove'];
+            $query = "UPDATE `comments` SET `comment_status`='Unapproved' WHERE `comments`.`comment_id`=$the_comment_id";
+            $unapproved_comment_query = mysqli_query($connection, $query);
+            header("Location: comments.php");
+        }
+
+
+        ?>
+
+        <?php
+        // his is the deleting functionality
         if (isset($_GET['delete'])) {
-            $the_post_id = $_GET['delete'];
-            $query = $query = "DELETE FROM `posts` WHERE `posts`.`post_id` = {$the_post_id}";
-            $delete_post = mysqli_query($connection, $query);
-            header("Location: posts.php");
+            $the_comment_id = $_GET['delete'];
+            $query = "DELETE FROM `comments` WHERE `comments`.`comment_id` = {$the_comment_id}";
+            $delete_comment = mysqli_query($connection, $query);
+            header("Location: comments.php");
         }
 
 
