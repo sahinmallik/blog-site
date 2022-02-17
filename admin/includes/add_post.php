@@ -15,7 +15,7 @@ if (isset($_POST['create_post'])) {
 
     move_uploaded_file($post_image_temp, "../images/$post_image");
 
-    $query = "INSERT INTO `posts`(`post_category_id`, `post_title`, `post_author`, `post_date`, `post_image`, `post_content`, `post_tags`, `post_status`) VALUES ({$post_category_id},'{$post_title}','{$post_author}',now(),'{$post_image}','{$post_content}','{$post_tags}','{$post_status}')";
+    $query = "INSERT INTO `posts`(`post_category_id`, `post_title`, `post_author`, `post_date`, `post_image`, `post_content`, `post_tags`,`post_comment_count`, `post_status`) VALUES ({$post_category_id},'{$post_title}','{$post_author}',now(),'{$post_image}','{$post_content}','{$post_tags}',0,'{$post_status}')";
 
     $create_post_query = mysqli_query($connection, $query);
 
@@ -40,14 +40,14 @@ if (isset($_POST['create_post'])) {
         <input type="text" class="form-control" name="post_title">
     </div>
     <div class="form-group">
-        <select name="post_category" id="">
+        <select name="user_role" id="">
 
             <?php
 
             $query = "SELECT * FROM `categories`";
-            $slecte_categories = mysqli_query($connection, $query);
-            confirm($slecte_categories);
-            while ($row = mysqli_fetch_assoc($slecte_categories)) {
+            $select_categories = mysqli_query($connection, $query);
+            confirm($select_categories);
+            while ($row = mysqli_fetch_assoc($select_categories)) {
                 $cat_id = $row['cat_id'];
                 $cat_title = $row['cat_title'];
                 echo "<option value='{$cat_id}'>{$cat_title}</option> ";
